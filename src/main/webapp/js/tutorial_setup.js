@@ -4,15 +4,14 @@ AUI.add(
     function (A) {
 
         var POPOVER_CONTENT = '<textarea class="content" />';
-        var POPOVER_FOOTER = '<button class="btn btn-left" data-action="left"><i class="icon-arrow-left"></i></button>' +
+        var POPOVER_FOOTER = '<button class="btn btn-left" data-action="left"><i class="icon-repeat"></i></button>' +
             '<button class="btn btn-primary" data-action="end">OK</button>' +
-            '<button class="btn btn-right" data-action="right"><i class="icon-arrow-right"></i></button>';
+            '<button class="btn btn-right" data-action="right"><i class="icon-undo"></i></button>';
 
         var CONFIG_TEMPLATE_WRAPPER =
             '<div class="tutorial-setup-container">' +
             '   <ol></ol>' +
             '   <div class="btn-row pagination-right">' +
-            '       <button class="btn-reorganize" data-action="reorganize"><i class="icon-resize-horizontal"></i></button>' +
             '       <button class="btn-save" data-action="save"><i class="icon-ok"></i></button>' +
             '   </div>' +
             '</div>'
@@ -27,11 +26,30 @@ AUI.add(
             '   </div>' +
             '</li>';
 
+        var POSITIONS = [
+            ['lc','rc','right'],
+            ['bc','tr','top'],
+            ['bc','tc','top'],
+            ['bc','tl','top'],
+            ['rc','lc','left'],
+            ['tc','bl','bottom'],
+            ['tc','bc','bottom'],
+            ['tc','br','bottom']
+        ];
+
+        var DEFAULT_POSITON = 6;
+
         var TutorialSetup = A.Component.create(
             {
                 EXTENDS: A.Base,
 
                 NAME: 'tutorial-setup',
+
+                ATTRS: {
+                    position:{
+                        value : DEFAULT_POSITON
+                    }
+                },
 
                 prototype: {
 
@@ -43,15 +61,18 @@ AUI.add(
 
                         instance._container = new Liferay.TutorialSetupContainer();
 
+
+                        var position = POSITIONS[DEFAULT_POSITON];
+
                         instance._popover = new A.Popover(
                             {
                                 align: {
-                                    points: [A.WidgetPositionAlign.TL, A.WidgetPositionAlign.BR]
+                                    points: [position[0], position[1]]
                                 },
                                 cssClass: 'tutorial-setup-popover',
                                 footerContent: footerContent,
                                 bodyContent: mainContent,
-                                position: 'bottom',
+                                position: position[2],
                                 zIndex: 20
                             }
                         );
@@ -59,16 +80,18 @@ AUI.add(
 
                         A.one('.tutorial-setup-popover .btn-primary').on('click', function () {
                             var value = instance._popover.get('boundingBox').one(".content").get('value');
-                            instance._container.addTutorialStep(value)
+                            instance._container.addTutorialStep(value);
                             instance._popover.set('visible', false);
                         });
                         A.one('.tutorial-setup-popover .btn-left').on('click', function () {
-                            instance._popover.align(instance._elem, ['rc', 'lc']);
-                            instance._popover.set('position','left');
+                            var index = instance.get('position');
+
+                            instance._setPosition(--index)
                         });
                         A.one('.tutorial-setup-popover .btn-right').on('click', function () {
-                            instance._popover.align(instance._elem, ['lc', 'rc']);
-                            instance._popover.set('position','right');
+                            var index = instance.get('position');
+
+                            instance._setPosition(++index)
                         });
 
 
@@ -87,12 +110,24 @@ AUI.add(
 
 
                                 instance._popover.set('visible', true);
-                                instance._popover.align(elem, ['tc', 'bc']);
+                                instance. _setPosition(DEFAULT_POSITON);
                                 instance._popover.get('boundingBox').one(".content").set('value','');
                                 instance._elem = elem;
                                 return false;
                             });
+                    },
+                    _setPosition : function(index) {
+                        var instance = this;
+                        var len = POSITIONS.length;
+
+                        index = (len +(index % len)) % len;
+
+                        var position = POSITIONS[index];
+                        instance._popover.align(instance._elem, [position[0],position[1]]);
+                        instance._popover.set('position', position[2]);
+                        instance.set('position', index);
                     }
+
                 }
             }
         );
@@ -111,10 +146,6 @@ AUI.add(
                         var instance = this;
 
                         instance._container = A.Node.create(CONFIG_TEMPLATE_WRAPPER);
-                        instance._container.one('.btn-reorganize').on('click',function(){
-                            instance._reorganize();
-                        });
-
 
                         instance._modal = new A.Modal(
                             {
@@ -132,10 +163,17 @@ AUI.add(
                             instance._modal.show();
                         },'.btn-setup');
 
+                        instance._sortableLayout = new A.SortableList(
+                            {
+                                dropCondition: function(event) {
+                                    return true;
+                                },
+                                dropOn: '.tutorial-setup-container > ol',
+                                nodes: '.tutorial-setup-container > ol > li',
+                            }
+                        );
+
                         A.one('body').appendChild(instance._container);
-
-
-
                     },
                     addTutorialStep : function(text){
                         var instance = this;
@@ -145,19 +183,9 @@ AUI.add(
 
                         instance._container.one('ol').appendChild(configTemplate);
 
-                    },
-                    _reorganize: function(){
-                        var sortableLayout = new A.SortableList(
-                            {
-                                dropCondition: function(event) {
-                                    return true;
-                                },
-                                dropOn: '.tutorial-setup-container > ol',
-                                nodes: '.tutorial-setup-container > ol > li',
-                            }
-                        );
-                    }
+                        instance._sortableLayout.add(configTemplate);
 
+                    }
                 }
             }
         );
