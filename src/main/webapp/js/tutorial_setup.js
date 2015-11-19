@@ -144,6 +144,9 @@ AUI.add(
                     initializer: function (config) {
                         var instance = this;
 
+                        instance._config = config;
+                        instance._index = 0;
+
                         var bodyContent = A.Node.create(SETUP_CONFIG_TEMPLATE);
 
                         instance._modal = new A.Modal(
@@ -178,20 +181,24 @@ AUI.add(
                         instance._input.hide();
 
                         instance._select.on('change',function(){
-                            if(this.get('value') == 'http') {
-                                instance._input.set('value','');
-                                instance._input.show();
-                            }else{
-                                instance._input.hide();
-                            }
+                            instance._resetForm(this.get('value'));
                         });
 
                     },
-                    show:function(state) {
+                    show:function(config, index) {
                         var instance = this;
 
-                        instance._select.set('value',state.option);
-                        instance._input.set('value',state.value);
+                        instance._config = config;
+                        instance._index = index;
+                        instance._resetForm(config.option);
+
+                        if(config){
+                            instance._select.set('value',config.option);
+                            instance._input.set('value',config.value);
+                        } else{
+                            instance._config ={};
+                        }
+
                         instance._modal.show();
                     },
                     hide:function() {
@@ -201,11 +208,21 @@ AUI.add(
                     _onSaveClick: function(){
                         var instance =this;
 
-                        var select = instance._select.get('value');
-                        var input = instance._input.get('value');
+                        instance._config.option = instance._select.get('value');
+                        instance._config.value = instance._input.get('value');
 
-                        instance.fire('setupConfigSave',{'option':select,'value':input});
+                        instance.fire('setupConfigSave',{config:instance._config,index:instance._index});
                         instance._modal.hide();
+                    }       ,
+                    _resetForm:function(value){
+                        var instance = this;
+
+                        if(value == 'http') {
+                            instance._input.set('value','');
+                            instance._input.show();
+                        }else{
+                            instance._input.hide();
+                        }
                     }
                 }
             });
@@ -261,7 +278,7 @@ AUI.add(
 
                             instance._container.all('.tutorial-step').each(function(){
                                 order.push(this.attr('data-index'));
-                            })
+                            });
 
                             for(var i=0;i<order.length;i++){
                                 sorted.push(unsorted[order[i]]);
@@ -272,7 +289,9 @@ AUI.add(
                         });
 
                         instance._container.delegate('click',function(){
-                            instance._setupConfig.show({});
+                            var index = this.ancestor('li').attr('data-index');
+                            var data = instance.get('steps')[index];
+                            instance._setupConfig.show(data.config,index);
                         },'.btn-setup');
 
                         instance._sortableLayout = new A.SortableList(
@@ -296,6 +315,12 @@ AUI.add(
                         });
 
                         instance._setupConfig.on('setupConfigSave', function(event) {
+                            var config = event['config'];
+                            var index = event['index'];
+                            var steps = instance.get('steps');
+
+                            steps[index]['config'] = config;
+
                         });
                     },
                     addTutorialStep : function(text, position, elem){
@@ -307,7 +332,8 @@ AUI.add(
                         steps.push({
                             text:text,
                             position:position,
-                            elem:elem
+                            elem:elem,
+                            config:{}
                         });
 
                         var configTemplate = A.Node.create(CONFIG_TEMPLATE);
