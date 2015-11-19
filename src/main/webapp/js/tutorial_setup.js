@@ -8,24 +8,6 @@ AUI.add(
             '<button class="btn btn-primary" data-action="end">OK</button>' +
             '<button class="btn btn-right" data-action="right"><i class="icon-undo"></i></button>';
 
-        var CONFIG_TEMPLATE_WRAPPER =
-            '<div class="tutorial-setup-container">' +
-            '   <ol></ol>' +
-            '   <div class="btn-row pagination-right">' +
-            '       <button class="btn-save" data-action="save"><i class="icon-ok"></i></button>' +
-            '   </div>' +
-            '</div>'
-
-        var CONFIG_TEMPLATE =
-            '<li class="tutorial-step">' +
-            '   <div class="btn-row pagination-right">' +
-            '       <button class="btn btn-setup" data-action="setup"><i class="icon-cogs"></i></button>' +
-            '   </div>' +
-            '   <div class="text">' +
-            '       <span></span>' +
-            '   </div>' +
-            '</li>';
-
         var POSITIONS = [
             ['lc','rc','right'],
             ['bc','tr','top'],
@@ -230,11 +212,36 @@ AUI.add(
 
         Liferay.TutorialSetupConfig = TutorialSetupConfig;
 
+        var CONFIG_TEMPLATE_WRAPPER =
+            '<div class="tutorial-setup-container">' +
+            '   <ol></ol>' +
+            '   <div class="btn-row pagination-right">' +
+            '       <button class="btn-save" data-action="save"><i class="icon-ok"></i></button>' +
+            '   </div>' +
+            '</div>'
+
+        var CONFIG_TEMPLATE =
+            '<li class="tutorial-step">' +
+            '   <div class="btn-row pagination-right">' +
+            '       <button class="btn btn-setup" data-action="setup"><i class="icon-cogs"></i></button>' +
+            '   </div>' +
+            '   <div class="text">' +
+            '       <span></span>' +
+            '   </div>' +
+            '</li>';
+
+
         var TutorialSetupContainer = A.Component.create(
             {
                 EXTENDS: A.Base,
 
                 NAME: 'tutorial-setup-container',
+
+                ATTRS: {
+                    steps: {
+                        value : []
+                    }
+                },
 
                 prototype: {
 
@@ -246,6 +253,23 @@ AUI.add(
                         instance._setup = new Liferay.TutorialSetup();
 
                         instance._setupConfig = new Liferay.TutorialSetupConfig();
+
+                        instance._container.one('.btn-save').on('click',function(){
+                            var unsorted = instance.get('steps');
+                            var order = [];
+                            var sorted = [];
+
+                            instance._container.all('.tutorial-step').each(function(){
+                                order.push(this.attr('data-index'));
+                            })
+
+                            for(var i=0;i<order.length;i++){
+                                sorted.push(unsorted[order[i]]);
+                            }
+
+                            console.log(JSON.stringify(sorted));
+
+                        });
 
                         instance._container.delegate('click',function(){
                             instance._setupConfig.show({});
@@ -264,18 +288,33 @@ AUI.add(
                         A.one('body').appendChild(instance._container);
 
                         instance._setup.on('tutorialStepSave', function(event) {
-                            instance.addTutorialStep(event['text']);
+                            var text = event['text'];
+                            var position = event['position'];
+                            var elem = event['elem'];
+
+                            instance.addTutorialStep(text, position, elem);
                         });
 
                         instance._setupConfig.on('setupConfigSave', function(event) {
-
                         });
                     },
-                    addTutorialStep : function(text){
+                    addTutorialStep : function(text, position, elem){
                         var instance = this;
+
+                        var steps = instance.get('steps');
+                        var index = steps.length;
+
+                        steps.push({
+                            text:text,
+                            position:position,
+                            elem:elem
+                        });
+
                         var configTemplate = A.Node.create(CONFIG_TEMPLATE);
 
                         configTemplate.one(".text > span").set('text',text);
+
+                        configTemplate.attr('data-index', index);
 
                         instance._container.one('ol').appendChild(configTemplate);
 
