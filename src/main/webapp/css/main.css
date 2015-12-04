@@ -1,25 +1,5 @@
 
-.aui .tutorial-popover.first-step button[data-action="prev"] {
-    display: none
+.aui {
+    @import "tutorial";
 }
 
-.aui .tutorial-popover.last-step button[data-action="next"] {
-    display: none
-}
-
-.aui div.tutorial-setup-container {
-    background-color: darkgrey;
-    bottom: 10px;
-    position: fixed;
-    height: 200px;
-    width: 100%;
-}
-
-.aui div.tutorial-setup-container .tutorial-step {
-    background-color: azure;
-    width: 200px;
-    height: 170px;
-    float: left;
-    padding: 5px;
-    margin: 10px;
-}

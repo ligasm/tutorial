@@ -21,17 +21,20 @@ AUI.add(
 
         var DEFAULT_POSITON = 6;
 
-        var TutorialSetup = A.Component.create(
+        var TutorialStep = A.Component.create(
             {
                 EXTENDS: A.Base,
 
-                NAME: 'tutorial-setup',
+                NAME: 'tutorial-step',
 
                 ATTRS: {
                     position: {
                         value : DEFAULT_POSITON
                     },
                     elem: {
+                        value:null
+                    },
+                    index: {
                         value:null
                     }
                 },
@@ -51,7 +54,7 @@ AUI.add(
                                 align: {
                                     points: [position[0], position[1]]
                                 },
-                                cssClass: 'tutorial-setup-popover',
+                                cssClass: 'tutorial-step-popover',
                                 footerContent: footerContent,
                                 bodyContent: mainContent,
                                 position: position[2],
@@ -67,7 +70,8 @@ AUI.add(
                                 {
                                     'text':value,
                                     'position':instance.get('position'),
-                                    'node':instance.get('elem')
+                                    'nodeElem':instance.get('elem'),
+                                    'index':instance.get('index')
                                 });
                         });
                         footerContent.one('.btn-left').on('click', function () {
@@ -97,21 +101,32 @@ AUI.add(
 
                                 elem.setStyle('border', '2px solid yellow');
 
-                                instance._elem = elem;
-                                instance. _setPosition(DEFAULT_POSITON);
-                                instance._popover.get('boundingBox').one(".content").set('value','');
-                                instance._popover.set('visible', true);
+                                instance.display.call(instance, {
+                                    node: elem,
+                                    position: DEFAULT_POSITON,
+                                    text: ''
+                                });
                                 return false;
                             });
                     },
+                    display :function (data){
+                        var instance = this;
+
+                        instance.set('elem', data.node);
+                        instance.set('index', data.index);
+                        instance. _setPosition(data.position);
+                        instance._popover.get('boundingBox').one(".content").set('value',data.text);
+                        instance._popover.set('visible', true);
+                    },
                     _setPosition : function(index) {
                         var instance = this;
+
                         var len = POSITIONS.length;
 
                         index = (len +(index % len)) % len;
 
                         var position = POSITIONS[index];
-                        instance._popover.align(instance._elem, [position[0],position[1]]);
+                        instance._popover.align(instance.get("elem"), [position[0],position[1]]);
                         instance._popover.set('position', position[2]);
                         instance.set('position', index);
                     }
@@ -120,11 +135,12 @@ AUI.add(
             }
         );
 
-        Liferay.TutorialSetup = TutorialSetup;
+        Liferay.TutorialStep = TutorialStep;
 
-        var SETUP_CONFIG_TEMPLATE =
+        var STEP_CONFIG_TEMPLATE =
             '<div class="tutorial-step-config">' +
             '   <select>' +
+            '      <option value="">&nbsp;</option>' +
             '      <option value="click">Click</option>' +
             '      <option value="dbclick">Double</option>' +
             '      <option value="http">Go to address</option>' +
@@ -133,11 +149,11 @@ AUI.add(
             '</div>';
 
 
-        var TutorialSetupConfig = A.Component.create(
+        var TutorialStepConfig = A.Component.create(
             {
                 EXTENDS: A.Base,
 
-                NAME: 'tutorial-setup-config',
+                NAME: 'tutorial-step-config',
 
                 prototype: {
 
@@ -147,7 +163,7 @@ AUI.add(
                         instance._config = config;
                         instance._index = 0;
 
-                        var bodyContent = A.Node.create(SETUP_CONFIG_TEMPLATE);
+                        var bodyContent = A.Node.create(STEP_CONFIG_TEMPLATE);
 
                         instance._modal = new A.Modal(
                             {
@@ -211,7 +227,7 @@ AUI.add(
                         instance._config.option = instance._select.get('value');
                         instance._config.value = instance._input.get('value');
 
-                        instance.fire('setupConfigSave',{config:instance._config,index:instance._index});
+                        instance.fire('stepConfigSave',{config:instance._config,index:instance._index});
                         instance._modal.hide();
                     }       ,
                     _resetForm:function(value){
@@ -227,20 +243,22 @@ AUI.add(
                 }
             });
 
-        Liferay.TutorialSetupConfig = TutorialSetupConfig;
+        Liferay.TutorialStepConfig = TutorialStepConfig;
 
-        var CONFIG_TEMPLATE_WRAPPER =
+        var TUTORIAL_CONTAINER_TEMPLATE =
             '<div class="tutorial-setup-container">' +
             '   <ol></ol>' +
             '   <div class="btn-row pagination-right">' +
-            '       <button class="btn-save" data-action="save"><i class="icon-ok"></i></button>' +
+            '       <button class="btn btn-save" data-action="saveAll"><i class="icon-ok"></i></button>' +
             '   </div>' +
             '</div>'
 
-        var CONFIG_TEMPLATE =
-            '<li class="tutorial-step">' +
+        var TUTORIAL_CONTAINER_ITEM_TEMPLATE =
+            '<li class="tutorial-setup-item">' +
             '   <div class="btn-row pagination-right">' +
-            '       <button class="btn btn-setup" data-action="setup"><i class="icon-cogs"></i></button>' +
+            '       <button class="btn btn-edit" data-action="editStep"><i class="icon-edit"></i></button>' +
+            '       <button class="btn btn-setup" data-action="setupStep"><i class="icon-cogs"></i></button>' +
+            '       <button class="btn btn-delete" data-action="removeStep"><i class="icon-remove"></i></button>' +
             '   </div>' +
             '   <div class="text">' +
             '       <span></span>' +
@@ -265,34 +283,11 @@ AUI.add(
                     initializer: function (config) {
                         var instance = this;
 
-                        instance._container = A.Node.create(CONFIG_TEMPLATE_WRAPPER);
+                        instance._tutorialcontainer = A.Node.create(TUTORIAL_CONTAINER_TEMPLATE);
 
-                        instance._setup = new Liferay.TutorialSetup();
+                        instance._tutorialStep = new Liferay.TutorialStep();
 
-                        instance._setupConfig = new Liferay.TutorialSetupConfig();
-
-                        instance._container.one('.btn-save').on('click',function(){
-                            var unsorted = instance.get('steps');
-                            var order = [];
-                            var sorted = [];
-
-                            instance._container.all('.tutorial-step').each(function(){
-                                order.push(this.attr('data-index'));
-                            });
-
-                            for(var i=0;i<order.length;i++){
-                                sorted.push(unsorted[order[i]]);
-                            }
-
-                            console.log(JSON.stringify(sorted));
-
-                        });
-
-                        instance._container.delegate('click',function(){
-                            var index = this.ancestor('li').attr('data-index');
-                            var data = instance.get('steps')[index];
-                            instance._setupConfig.show(data.config,index);
-                        },'.btn-setup');
+                        instance._tutorialStepConfig = new Liferay.TutorialStepConfig();
 
                         instance._sortableLayout = new A.SortableList(
                             {
@@ -304,24 +299,74 @@ AUI.add(
                             }
                         );
 
-                        A.one('body').appendChild(instance._container);
+                        instance.bindUI();
 
-                        instance._setup.on('tutorialStepSave', function(event) {
-                            var text = event['text'];
-                            var position = event['position'];
-                            var elem = event['elem'];
+                        instance.renderUI();
+                    },
+                    renderUI : function (){
+                        var instance = this;
+                        A.one('body').appendChild(instance._tutorialcontainer);
+                    },
+                    bindUI :function(){
+                        var instance = this;
 
-                            instance.addTutorialStep(text, position, elem);
+
+                        instance._tutorialcontainer.delegate('click', instance._onClickAcrionHandling,'.btn', instance);
+
+                        instance._tutorialStep.on('tutorialStepSave', function(event) {
+                            var index = event['index'];
+                            if(index){
+                                instance.editTutorialStep.call(instance,
+                                    event['text'], event['position'], index);
+                            } else {
+                            instance.addTutorialStep.call(instance,
+                                event['text'], event['position'], event['nodeElem']);
+                            }
                         });
 
-                        instance._setupConfig.on('setupConfigSave', function(event) {
+                        instance._tutorialStepConfig.on('stepConfigSave', function(event) {
                             var config = event['config'];
                             var index = event['index'];
                             var steps = instance.get('steps');
 
                             steps[index]['config'] = config;
-
                         });
+                    },
+                    editStep : function(targetElem){
+                        var instance = this;
+                        var data = instance._getStepData.call(instance, targetElem);
+                        instance._tutorialStep.display(data);
+                    },
+                    setupStep : function(targetElem){
+                        var instance = this;
+                        var data = instance._getStepData.call(instance, targetElem);
+                        instance._tutorialStepConfig.show(data.config, data.index);
+                    },
+                    removeStep : function(targetElem){
+                        var instance = this;
+                        var nodeElem = targetElem.ancestor('li')
+                        var index = nodeElem.attr('data-index');
+                        nodeElem.remove();
+                        delete instance.get('steps')[index];
+
+
+                    },
+                    saveAll:function(){
+                        var instance = this;
+
+                        var unsortedData = instance.get('steps')
+                        var order = [];
+                        var sorted = [];
+
+                        instance._tutorialcontainer.all('.tutorial-setup-item').each(function(){
+                            order.push(this.attr('data-index'));
+                        });
+
+                        for(var i=0;i<order.length;i++){
+                            sorted.push(unsortedData[order[i]]);
+                        }
+
+                        console.log(JSON.stringify(sorted));
                     },
                     addTutorialStep : function(text, position, elem){
                         var instance = this;
@@ -336,17 +381,50 @@ AUI.add(
                             config:{}
                         });
 
-                        var configTemplate = A.Node.create(CONFIG_TEMPLATE);
+                        var configTemplate = A.Node.create(TUTORIAL_CONTAINER_ITEM_TEMPLATE);
 
-                        configTemplate.one(".text > span").set('text',text);
+                        configTemplate.one(".text > span").set('text', text);
 
                         configTemplate.attr('data-index', index);
 
-                        instance._container.one('ol').appendChild(configTemplate);
+                        instance._tutorialcontainer.one('ol').appendChild(configTemplate);
 
                         instance._sortableLayout.add(configTemplate);
 
-                    }
+                    },
+                    editTutorialStep : function(text, position, index){
+                        var instance = this;
+
+                        var steps = instance.get('steps');
+
+                        A.mix(steps[index],
+                            {
+                                text: text,
+                                position: position
+                            },true);
+
+                        instance._tutorialcontainer.one('li.tutorial-setup-item[data-index="'+index+'"] .text > span')
+                            .set('text', text);
+
+                    },
+                    _getStepData : function (stepElem){
+                        var instance = this;
+                        var index = stepElem.ancestor('li').attr('data-index');
+                        var data = instance.get('steps')[index];
+                        data.index = index;
+                        return data;
+                    } ,
+                    _onClickAcrionHandling: function(event) {
+                        var instance = this;
+
+                        var currentTarget = event.currentTarget;
+
+                        var action = currentTarget.attr('data-action');
+
+                        if (instance[action]) {
+                            instance[action](currentTarget);
+                        }
+                    },
                 }
             }
         );
