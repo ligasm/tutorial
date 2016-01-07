@@ -281,6 +281,8 @@ AUI.add(
                 prototype: {
 
                     initializer: function (config) {
+                        config = config || {};
+
                         var instance = this;
 
                         instance._tutorialcontainer = A.Node.create(TUTORIAL_CONTAINER_TEMPLATE);
@@ -298,6 +300,10 @@ AUI.add(
                                 nodes: '.tutorial-setup-container > ol > li',
                             }
                         );
+
+                        if(config.saveFn){
+                            instance._saveIO = config.saveFn;
+                        }
 
                         instance.bindUI();
 
@@ -344,7 +350,7 @@ AUI.add(
                     },
                     removeStep : function(targetElem){
                         var instance = this;
-                        var nodeElem = targetElem.ancestor('li')
+                        var nodeElem = targetElem.ancestor('li');
                         var index = nodeElem.attr('data-index');
                         nodeElem.remove();
                         delete instance.get('steps')[index];
@@ -354,7 +360,7 @@ AUI.add(
                     saveAll:function(){
                         var instance = this;
 
-                        var unsortedData = instance.get('steps')
+                        var unsortedData = instance.get('steps');
                         var order = [];
                         var sorted = [];
 
@@ -363,10 +369,15 @@ AUI.add(
                         });
 
                         for(var i=0;i<order.length;i++){
-                            sorted.push(unsortedData[order[i]]);
+                            var step = unsortedData[order[i]];
+                            if(step){
+                                var storeStep = A.mix({},step);
+                                storeStep.elem = instance._elemSerialization(storeStep.elem);
+                                sorted.push(storeStep);
+                            }
                         }
 
-                        console.log(JSON.stringify(sorted));
+                        instance._saveIO(JSON.stringify(sorted));
                     },
                     addTutorialStep : function(text, position, elem){
                         var instance = this;
@@ -425,6 +436,45 @@ AUI.add(
                             instance[action](currentTarget);
                         }
                     },
+                    _elemSerialization : function(elem){
+                        var path = "";
+                        var ancestors = elem.ancestors()._nodes;
+                        var index = 0;
+
+                        for(var i = ancestors.length -1; i>=0 ;i--){
+                            if(!ancestors[i].id.startsWith("yui")){
+                                index = i;
+                                break;
+                            }
+                        }
+
+                        for(var i = index; i<ancestors.length ; i++){
+                            var node = ancestors[i];
+
+                            var elemName = node.nodeName;
+                            var elemId = node.id
+
+                            path += elemName
+
+                            if(elemId.startsWith("yui")){
+                                A.Array.each(node.classList, function(value){
+                                    path += "." + value + ", ";
+                                });
+
+                                path = path.slice(0, -2);
+                            }else{
+                                path += "#"+ elemId;
+                            }
+
+                            path += " > "
+                        }
+
+                        return path.slice(0, -3);
+                    },
+                    _saveIO : function(data){
+                        console.log("Provide save to server operation.");
+                        console.log(data);
+                    }
                 }
             }
         );

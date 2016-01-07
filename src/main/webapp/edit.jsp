@@ -24,7 +24,22 @@
 			function (A) {
 
 
-				new Liferay.TutorialSetupContainer();
+				new Liferay.TutorialSetupContainer({
+					saveFn: function (data) {
+						Liferay.Service(
+								'/tutorial-portlet.tutorialstep/add-tutorial-steps',
+								{
+									plid: themeDisplay.getPlid(),
+									companyId: themeDisplay.getCompanyId(),
+									groupId: themeDisplay.getScopeGroupId(),
+									stepsListJson: data
+								},
+								function (obj) {
+									console.log(obj);
+								}
+						);
+					}
+				});
 			}
 	);
 </script>
