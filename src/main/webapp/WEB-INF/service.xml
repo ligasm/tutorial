@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+
+<service-builder package-path="com.liferay.tutorial">
+    <author>Miroslav Ligas</author>
+    <namespace>Tutorial</namespace>
+    <entity name="TutorialStep" local-service="true" remote-service="true">
+
+        <column name="stepId" type="long" primary="true" />
+
+        <column name="companyId" type="long" />
+        <column name="groupId" type="long" />
+        <column name="plid" type="long" />
+
+        <column name="sequence" type="int" />
+        <column name="message" type="String" localized="true"/>
+        <column name="position" type="int"/>
+        <column name="node" type="String"/>
+        <column name="action" type="String"/>
+        <column name="actionValue" type="String"/>
+    </entity>
+</service-builder>

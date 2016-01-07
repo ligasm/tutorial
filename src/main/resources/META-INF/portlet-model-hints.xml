@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.liferay.tutorial.model.TutorialStep">
+		<field name="stepId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="plid" type="long" />
+		<field name="sequence" type="int" />
+		<field name="message" type="String" localized="true">
+			<hint name="max-length">4000</hint>
+		</field>
+		<field name="position" type="int" />
+		<field name="node" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="action" type="String" />
+		<field name="actionValue" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+	</model>
+</model-hints>
