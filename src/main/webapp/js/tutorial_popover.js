@@ -217,12 +217,11 @@ AUI.add(
 					},
 
 					_executeAfter : function(step){
-
 						if(typeof step.after === 'function'){
 							step.after();
 						} else{
 							if(step.after.action == 'click' || step.after.action == 'dblclick'){
-								step.align.node.fire(step.after.action)
+								step.align.node.simulate(step.after.action)
 							} else if(step.after.action == 'http'){
 								document.location.href = step.after.value;
 							}

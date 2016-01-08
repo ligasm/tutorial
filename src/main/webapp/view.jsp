@@ -40,7 +40,7 @@
 						},
 						function(obj) {
 							var _tutorialSteps = [];
-							A.Array.forEach(obj, function(item){
+							A.Array.each(obj, function(item){
 								var after = {};
 								if(item.action){
 									after.action = item.action;
