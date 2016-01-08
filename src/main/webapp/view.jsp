@@ -23,6 +23,18 @@
 	AUI().ready('tutorial',
 			function (A) {
 
+				Liferay.Service(
+						'/tutorial-portlet.tutorialstep/get-tutorial-steps',
+						{
+							plid: themeDisplay.getPlid(),
+							companyId: themeDisplay.getCompanyId(),
+							groupId: themeDisplay.getScopeGroupId()
+						},
+						function(obj) {
+							console.log(obj);
+						}
+				);
+
 				var _tutorialSteps = [
 					{
 						align: {

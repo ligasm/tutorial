@@ -47,6 +47,8 @@ public class TutorialStepLocalServiceClpInvoker {
     private String[] _methodParameterTypes35;
     private String _methodName40;
     private String[] _methodParameterTypes40;
+    private String _methodName41;
+    private String[] _methodParameterTypes41;
 
     public TutorialStepLocalServiceClpInvoker() {
         _methodName0 = "addTutorialStep";
@@ -144,6 +146,10 @@ public class TutorialStepLocalServiceClpInvoker {
         _methodParameterTypes40 = new String[] {
                 "com.liferay.tutorial.model.TutorialStep"
             };
+
+        _methodName41 = "getTutorialSteps";
+
+        _methodParameterTypes41 = new String[] { "long", "long", "long" };
     }
 
     public Object invokeMethod(String name, String[] parameterTypes,
@@ -250,6 +256,13 @@ public class TutorialStepLocalServiceClpInvoker {
         if (_methodName40.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes40, parameterTypes)) {
             return TutorialStepLocalServiceUtil.addNewTutorialStep((com.liferay.tutorial.model.TutorialStep) arguments[0]);
+        }
+
+        if (_methodName41.equals(name) &&
+                Arrays.deepEquals(_methodParameterTypes41, parameterTypes)) {
+            return TutorialStepLocalServiceUtil.getTutorialSteps(((Long) arguments[0]).longValue(),
+                ((Long) arguments[1]).longValue(),
+                ((Long) arguments[2]).longValue());
         }
 
         throw new UnsupportedOperationException();

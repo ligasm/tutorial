@@ -243,4 +243,9 @@ public interface TutorialStepLocalService extends BaseLocalService,
         com.liferay.tutorial.model.TutorialStep tutorialStep)
         throws com.liferay.portal.kernel.exception.PortalException,
             com.liferay.portal.kernel.exception.SystemException;
+
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public java.util.List<com.liferay.tutorial.model.TutorialStep> getTutorialSteps(
+        long companyId, long groupId, long plid)
+        throws com.liferay.portal.kernel.exception.SystemException;
 }

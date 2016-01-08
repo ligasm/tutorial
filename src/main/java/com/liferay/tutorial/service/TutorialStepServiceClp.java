@@ -14,6 +14,8 @@ public class TutorialStepServiceClp implements TutorialStepService {
     private String[] _methodParameterTypes1;
     private String _methodName3;
     private String[] _methodParameterTypes3;
+    private String _methodName4;
+    private String[] _methodParameterTypes4;
 
     public TutorialStepServiceClp(InvokableService invokableService) {
         _invokableService = invokableService;
@@ -31,6 +33,10 @@ public class TutorialStepServiceClp implements TutorialStepService {
         _methodParameterTypes3 = new String[] {
                 "long", "long", "long", "java.lang.String"
             };
+
+        _methodName4 = "getTutorialSteps";
+
+        _methodParameterTypes4 = new String[] { "long", "long", "long" };
     }
 
     @Override
@@ -114,5 +120,33 @@ public class TutorialStepServiceClp implements TutorialStepService {
                     " is not a valid exception");
             }
         }
+    }
+
+    @Override
+    public java.util.List<com.liferay.tutorial.model.TutorialStep> getTutorialSteps(
+        long companyId, long groupId, long plid)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        Object returnObj = null;
+
+        try {
+            returnObj = _invokableService.invokeMethod(_methodName4,
+                    _methodParameterTypes4,
+                    new Object[] { companyId, groupId, plid });
+        } catch (Throwable t) {
+            t = ClpSerializer.translateThrowable(t);
+
+            if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+                throw (com.liferay.portal.kernel.exception.SystemException) t;
+            }
+
+            if (t instanceof RuntimeException) {
+                throw (RuntimeException) t;
+            } else {
+                throw new RuntimeException(t.getClass().getName() +
+                    " is not a valid exception");
+            }
+        }
+
+        return (java.util.List<com.liferay.tutorial.model.TutorialStep>) ClpSerializer.translateOutput(returnObj);
     }
 }

@@ -18,5 +18,15 @@
         <column name="node" type="String"/>
         <column name="action" type="String"/>
         <column name="actionValue" type="String"/>
+
+        <order  by="asc">
+            <order-column name="sequence" />
+        </order>
+
+        <finder name="C_G_P" return-type="Collection">
+            <finder-column name="companyId" />
+            <finder-column name="groupId" />
+            <finder-column name="plid" />
+        </finder>
     </entity>
 </service-builder>

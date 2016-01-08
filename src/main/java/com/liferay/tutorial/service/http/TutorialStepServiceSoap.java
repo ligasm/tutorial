@@ -61,4 +61,18 @@ public class TutorialStepServiceSoap {
             throw new RemoteException(e.getMessage());
         }
     }
+
+    public static com.liferay.tutorial.model.TutorialStepSoap[] getTutorialSteps(
+        long companyId, long groupId, long plid) throws RemoteException {
+        try {
+            java.util.List<com.liferay.tutorial.model.TutorialStep> returnValue = TutorialStepServiceUtil.getTutorialSteps(companyId,
+                    groupId, plid);
+
+            return com.liferay.tutorial.model.TutorialStepSoap.toSoapModels(returnValue);
+        } catch (Exception e) {
+            _log.error(e, e);
+
+            throw new RemoteException(e.getMessage());
+        }
+    }
 }

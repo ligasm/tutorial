@@ -15,6 +15,8 @@ public class TutorialStepServiceClpInvoker {
     private String[] _methodParameterTypes19;
     private String _methodName24;
     private String[] _methodParameterTypes24;
+    private String _methodName25;
+    private String[] _methodParameterTypes25;
 
     public TutorialStepServiceClpInvoker() {
         _methodName18 = "getBeanIdentifier";
@@ -30,6 +32,10 @@ public class TutorialStepServiceClpInvoker {
         _methodParameterTypes24 = new String[] {
                 "long", "long", "long", "java.lang.String"
             };
+
+        _methodName25 = "getTutorialSteps";
+
+        _methodParameterTypes25 = new String[] { "long", "long", "long" };
     }
 
     public Object invokeMethod(String name, String[] parameterTypes,
@@ -54,6 +60,13 @@ public class TutorialStepServiceClpInvoker {
                 (java.lang.String) arguments[3]);
 
             return null;
+        }
+
+        if (_methodName25.equals(name) &&
+                Arrays.deepEquals(_methodParameterTypes25, parameterTypes)) {
+            return TutorialStepServiceUtil.getTutorialSteps(((Long) arguments[0]).longValue(),
+                ((Long) arguments[1]).longValue(),
+                ((Long) arguments[2]).longValue());
         }
 
         throw new UnsupportedOperationException();

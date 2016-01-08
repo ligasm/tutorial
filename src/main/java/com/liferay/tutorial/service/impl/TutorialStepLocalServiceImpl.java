@@ -6,6 +6,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.tutorial.model.TutorialStep;
 import com.liferay.tutorial.service.base.TutorialStepLocalServiceBaseImpl;
 
+import java.util.List;
+
 /**
  * The implementation of the tutorial step local service.
  *
@@ -27,5 +29,9 @@ public class TutorialStepLocalServiceImpl
 		long id = counterLocalService.increment(TutorialStep.class.getName());
 		tutorialStep.setStepId(id);
 		return addTutorialStep(tutorialStep);
+	}
+
+	public List<TutorialStep> getTutorialSteps(long companyId, long groupId, long plid) throws SystemException {
+		return tutorialStepPersistence.findByC_G_P(companyId, groupId, plid);
 	}
 }

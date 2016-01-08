@@ -99,6 +99,195 @@ public class TutorialStepUtil {
     }
 
     /**
+    * Returns all the tutorial steps where companyId = &#63; and groupId = &#63; and plid = &#63;.
+    *
+    * @param companyId the company ID
+    * @param groupId the group ID
+    * @param plid the plid
+    * @return the matching tutorial steps
+    * @throws SystemException if a system exception occurred
+    */
+    public static java.util.List<com.liferay.tutorial.model.TutorialStep> findByC_G_P(
+        long companyId, long groupId, long plid)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        return getPersistence().findByC_G_P(companyId, groupId, plid);
+    }
+
+    /**
+    * Returns a range of all the tutorial steps where companyId = &#63; and groupId = &#63; and plid = &#63;.
+    *
+    * <p>
+    * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.tutorial.model.impl.TutorialStepModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+    * </p>
+    *
+    * @param companyId the company ID
+    * @param groupId the group ID
+    * @param plid the plid
+    * @param start the lower bound of the range of tutorial steps
+    * @param end the upper bound of the range of tutorial steps (not inclusive)
+    * @return the range of matching tutorial steps
+    * @throws SystemException if a system exception occurred
+    */
+    public static java.util.List<com.liferay.tutorial.model.TutorialStep> findByC_G_P(
+        long companyId, long groupId, long plid, int start, int end)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        return getPersistence().findByC_G_P(companyId, groupId, plid, start, end);
+    }
+
+    /**
+    * Returns an ordered range of all the tutorial steps where companyId = &#63; and groupId = &#63; and plid = &#63;.
+    *
+    * <p>
+    * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.tutorial.model.impl.TutorialStepModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+    * </p>
+    *
+    * @param companyId the company ID
+    * @param groupId the group ID
+    * @param plid the plid
+    * @param start the lower bound of the range of tutorial steps
+    * @param end the upper bound of the range of tutorial steps (not inclusive)
+    * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+    * @return the ordered range of matching tutorial steps
+    * @throws SystemException if a system exception occurred
+    */
+    public static java.util.List<com.liferay.tutorial.model.TutorialStep> findByC_G_P(
+        long companyId, long groupId, long plid, int start, int end,
+        com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        return getPersistence()
+                   .findByC_G_P(companyId, groupId, plid, start, end,
+            orderByComparator);
+    }
+
+    /**
+    * Returns the first tutorial step in the ordered set where companyId = &#63; and groupId = &#63; and plid = &#63;.
+    *
+    * @param companyId the company ID
+    * @param groupId the group ID
+    * @param plid the plid
+    * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+    * @return the first matching tutorial step
+    * @throws com.liferay.tutorial.NoSuchStepException if a matching tutorial step could not be found
+    * @throws SystemException if a system exception occurred
+    */
+    public static com.liferay.tutorial.model.TutorialStep findByC_G_P_First(
+        long companyId, long groupId, long plid,
+        com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+        throws com.liferay.portal.kernel.exception.SystemException,
+            com.liferay.tutorial.NoSuchStepException {
+        return getPersistence()
+                   .findByC_G_P_First(companyId, groupId, plid,
+            orderByComparator);
+    }
+
+    /**
+    * Returns the first tutorial step in the ordered set where companyId = &#63; and groupId = &#63; and plid = &#63;.
+    *
+    * @param companyId the company ID
+    * @param groupId the group ID
+    * @param plid the plid
+    * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+    * @return the first matching tutorial step, or <code>null</code> if a matching tutorial step could not be found
+    * @throws SystemException if a system exception occurred
+    */
+    public static com.liferay.tutorial.model.TutorialStep fetchByC_G_P_First(
+        long companyId, long groupId, long plid,
+        com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        return getPersistence()
+                   .fetchByC_G_P_First(companyId, groupId, plid,
+            orderByComparator);
+    }
+
+    /**
+    * Returns the last tutorial step in the ordered set where companyId = &#63; and groupId = &#63; and plid = &#63;.
+    *
+    * @param companyId the company ID
+    * @param groupId the group ID
+    * @param plid the plid
+    * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+    * @return the last matching tutorial step
+    * @throws com.liferay.tutorial.NoSuchStepException if a matching tutorial step could not be found
+    * @throws SystemException if a system exception occurred
+    */
+    public static com.liferay.tutorial.model.TutorialStep findByC_G_P_Last(
+        long companyId, long groupId, long plid,
+        com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+        throws com.liferay.portal.kernel.exception.SystemException,
+            com.liferay.tutorial.NoSuchStepException {
+        return getPersistence()
+                   .findByC_G_P_Last(companyId, groupId, plid, orderByComparator);
+    }
+
+    /**
+    * Returns the last tutorial step in the ordered set where companyId = &#63; and groupId = &#63; and plid = &#63;.
+    *
+    * @param companyId the company ID
+    * @param groupId the group ID
+    * @param plid the plid
+    * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+    * @return the last matching tutorial step, or <code>null</code> if a matching tutorial step could not be found
+    * @throws SystemException if a system exception occurred
+    */
+    public static com.liferay.tutorial.model.TutorialStep fetchByC_G_P_Last(
+        long companyId, long groupId, long plid,
+        com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        return getPersistence()
+                   .fetchByC_G_P_Last(companyId, groupId, plid,
+            orderByComparator);
+    }
+
+    /**
+    * Returns the tutorial steps before and after the current tutorial step in the ordered set where companyId = &#63; and groupId = &#63; and plid = &#63;.
+    *
+    * @param stepId the primary key of the current tutorial step
+    * @param companyId the company ID
+    * @param groupId the group ID
+    * @param plid the plid
+    * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+    * @return the previous, current, and next tutorial step
+    * @throws com.liferay.tutorial.NoSuchStepException if a tutorial step with the primary key could not be found
+    * @throws SystemException if a system exception occurred
+    */
+    public static com.liferay.tutorial.model.TutorialStep[] findByC_G_P_PrevAndNext(
+        long stepId, long companyId, long groupId, long plid,
+        com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+        throws com.liferay.portal.kernel.exception.SystemException,
+            com.liferay.tutorial.NoSuchStepException {
+        return getPersistence()
+                   .findByC_G_P_PrevAndNext(stepId, companyId, groupId, plid,
+            orderByComparator);
+    }
+
+    /**
+    * Removes all the tutorial steps where companyId = &#63; and groupId = &#63; and plid = &#63; from the database.
+    *
+    * @param companyId the company ID
+    * @param groupId the group ID
+    * @param plid the plid
+    * @throws SystemException if a system exception occurred
+    */
+    public static void removeByC_G_P(long companyId, long groupId, long plid)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        getPersistence().removeByC_G_P(companyId, groupId, plid);
+    }
+
+    /**
+    * Returns the number of tutorial steps where companyId = &#63; and groupId = &#63; and plid = &#63;.
+    *
+    * @param companyId the company ID
+    * @param groupId the group ID
+    * @param plid the plid
+    * @return the number of matching tutorial steps
+    * @throws SystemException if a system exception occurred
+    */
+    public static int countByC_G_P(long companyId, long groupId, long plid)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        return getPersistence().countByC_G_P(companyId, groupId, plid);
+    }
+
+    /**
     * Caches the tutorial step in the entity cache if it is enabled.
     *
     * @param tutorialStep the tutorial step

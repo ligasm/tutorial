@@ -1,0 +1,1 @@
+create index IX_F5BEFE9E on Tutorial_TutorialStep (companyId, groupId, plid);

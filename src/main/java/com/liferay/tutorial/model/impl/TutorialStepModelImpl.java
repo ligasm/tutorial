@@ -69,8 +69,8 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
         };
     public static final String TABLE_SQL_CREATE = "create table Tutorial_TutorialStep (stepId LONG not null primary key,companyId LONG,groupId LONG,plid LONG,sequence INTEGER,message STRING null,position INTEGER,node VARCHAR(255) null,action VARCHAR(75) null,actionValue VARCHAR(255) null)";
     public static final String TABLE_SQL_DROP = "drop table Tutorial_TutorialStep";
-    public static final String ORDER_BY_JPQL = " ORDER BY tutorialStep.stepId ASC";
-    public static final String ORDER_BY_SQL = " ORDER BY Tutorial_TutorialStep.stepId ASC";
+    public static final String ORDER_BY_JPQL = " ORDER BY tutorialStep.sequence ASC";
+    public static final String ORDER_BY_SQL = " ORDER BY Tutorial_TutorialStep.sequence ASC";
     public static final String DATA_SOURCE = "liferayDataSource";
     public static final String SESSION_FACTORY = "liferaySessionFactory";
     public static final String TX_MANAGER = "liferayTransactionManager";
@@ -80,7 +80,13 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
     public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
                 "value.object.finder.cache.enabled.com.liferay.tutorial.model.TutorialStep"),
             true);
-    public static final boolean COLUMN_BITMASK_ENABLED = false;
+    public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+                "value.object.column.bitmask.enabled.com.liferay.tutorial.model.TutorialStep"),
+            true);
+    public static long COMPANYID_COLUMN_BITMASK = 1L;
+    public static long GROUPID_COLUMN_BITMASK = 2L;
+    public static long PLID_COLUMN_BITMASK = 4L;
+    public static long SEQUENCE_COLUMN_BITMASK = 8L;
     public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
                 "lock.expiration.time.com.liferay.tutorial.model.TutorialStep"));
     private static ClassLoader _classLoader = TutorialStep.class.getClassLoader();
@@ -89,8 +95,14 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
         };
     private long _stepId;
     private long _companyId;
+    private long _originalCompanyId;
+    private boolean _setOriginalCompanyId;
     private long _groupId;
+    private long _originalGroupId;
+    private boolean _setOriginalGroupId;
     private long _plid;
+    private long _originalPlid;
+    private boolean _setOriginalPlid;
     private int _sequence;
     private String _message;
     private String _messageCurrentLanguageId;
@@ -98,6 +110,7 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
     private String _node;
     private String _action;
     private String _actionValue;
+    private long _columnBitmask;
     private TutorialStep _escapedModel;
 
     public TutorialStepModelImpl() {
@@ -280,7 +293,19 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
 
     @Override
     public void setCompanyId(long companyId) {
+        _columnBitmask |= COMPANYID_COLUMN_BITMASK;
+
+        if (!_setOriginalCompanyId) {
+            _setOriginalCompanyId = true;
+
+            _originalCompanyId = _companyId;
+        }
+
         _companyId = companyId;
+    }
+
+    public long getOriginalCompanyId() {
+        return _originalCompanyId;
     }
 
     @JSON
@@ -291,7 +316,19 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
 
     @Override
     public void setGroupId(long groupId) {
+        _columnBitmask |= GROUPID_COLUMN_BITMASK;
+
+        if (!_setOriginalGroupId) {
+            _setOriginalGroupId = true;
+
+            _originalGroupId = _groupId;
+        }
+
         _groupId = groupId;
+    }
+
+    public long getOriginalGroupId() {
+        return _originalGroupId;
     }
 
     @JSON
@@ -302,7 +339,19 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
 
     @Override
     public void setPlid(long plid) {
+        _columnBitmask |= PLID_COLUMN_BITMASK;
+
+        if (!_setOriginalPlid) {
+            _setOriginalPlid = true;
+
+            _originalPlid = _plid;
+        }
+
         _plid = plid;
+    }
+
+    public long getOriginalPlid() {
+        return _originalPlid;
     }
 
     @JSON
@@ -313,6 +362,8 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
 
     @Override
     public void setSequence(int sequence) {
+        _columnBitmask = -1L;
+
         _sequence = sequence;
     }
 
@@ -470,6 +521,10 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
         _actionValue = actionValue;
     }
 
+    public long getColumnBitmask() {
+        return _columnBitmask;
+    }
+
     @Override
     public ExpandoBridge getExpandoBridge() {
         return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
@@ -568,15 +623,21 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
 
     @Override
     public int compareTo(TutorialStep tutorialStep) {
-        long primaryKey = tutorialStep.getPrimaryKey();
+        int value = 0;
 
-        if (getPrimaryKey() < primaryKey) {
-            return -1;
-        } else if (getPrimaryKey() > primaryKey) {
-            return 1;
+        if (getSequence() < tutorialStep.getSequence()) {
+            value = -1;
+        } else if (getSequence() > tutorialStep.getSequence()) {
+            value = 1;
         } else {
-            return 0;
+            value = 0;
         }
+
+        if (value != 0) {
+            return value;
+        }
+
+        return 0;
     }
 
     @Override
@@ -607,6 +668,21 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
 
     @Override
     public void resetOriginalValues() {
+        TutorialStepModelImpl tutorialStepModelImpl = this;
+
+        tutorialStepModelImpl._originalCompanyId = tutorialStepModelImpl._companyId;
+
+        tutorialStepModelImpl._setOriginalCompanyId = false;
+
+        tutorialStepModelImpl._originalGroupId = tutorialStepModelImpl._groupId;
+
+        tutorialStepModelImpl._setOriginalGroupId = false;
+
+        tutorialStepModelImpl._originalPlid = tutorialStepModelImpl._plid;
+
+        tutorialStepModelImpl._setOriginalPlid = false;
+
+        tutorialStepModelImpl._columnBitmask = 0;
     }
 
     @Override

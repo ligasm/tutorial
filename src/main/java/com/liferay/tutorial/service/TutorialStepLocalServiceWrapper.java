@@ -281,6 +281,14 @@ public class TutorialStepLocalServiceWrapper implements TutorialStepLocalService
         return _tutorialStepLocalService.addNewTutorialStep(tutorialStep);
     }
 
+    @Override
+    public java.util.List<com.liferay.tutorial.model.TutorialStep> getTutorialSteps(
+        long companyId, long groupId, long plid)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        return _tutorialStepLocalService.getTutorialSteps(companyId, groupId,
+            plid);
+    }
+
     /**
      * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
      */

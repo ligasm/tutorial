@@ -5,8 +5,13 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.security.ac.AccessControlled;
 import com.liferay.tutorial.model.TutorialStep;
 import com.liferay.tutorial.service.base.TutorialStepServiceBaseImpl;
+
+import java.util.List;
 
 /**
  * The implementation of the tutorial step remote service.
@@ -28,11 +33,13 @@ public class TutorialStepServiceImpl extends TutorialStepServiceBaseImpl {
 		int i = 0;
 		JSONArray stepList = JSONFactoryUtil.createJSONArray(stepsListJson);
 
+		temporaryFixCleanUP(companyId,groupId, plid);
+
 		for (int j = 0; j < stepList.length(); j++) {
 			JSONObject step = stepList.getJSONObject(j);
 
-			long id = super.counterLocalService.increment(TutorialStep.class.getName());
-			TutorialStep tutorialStep = super.tutorialStepLocalService.createTutorialStep(id);
+			long id = counterLocalService.increment(TutorialStep.class.getName());
+			TutorialStep tutorialStep = tutorialStepLocalService.createTutorialStep(id);
 
 			tutorialStep.setCompanyId(companyId);
 			tutorialStep.setGroupId(groupId);
@@ -47,7 +54,26 @@ public class TutorialStepServiceImpl extends TutorialStepServiceBaseImpl {
 			tutorialStep.setAction(config.getString("option"));
 			tutorialStep.setActionValue(config.getString("value"));
 
-			super.tutorialStepLocalService.addNewTutorialStep(tutorialStep);
+			tutorialStepLocalService.addNewTutorialStep(tutorialStep);
 		}
 	}
+
+	@AccessControlled(guestAccessEnabled = true)
+	public List<TutorialStep> getTutorialSteps(long companyId, long groupId, long plid) throws SystemException {
+		return super.tutorialStepLocalService.getTutorialSteps(companyId, groupId, plid);
+	}
+
+	private void temporaryFixCleanUP(long companyId, long groupId, long plid) {
+		try {
+			List<TutorialStep> tutorialSteps = tutorialStepLocalService.getTutorialSteps(companyId, groupId, plid);
+			for (TutorialStep step : tutorialSteps) {
+				tutorialStepLocalService.deleteTutorialStep(step.getStepId());
+			}
+		} catch (Exception e) {
+			LOG.error("Unable to delete entries for plid "+plid, e);
+		}
+	}
+
+	private final static Log LOG = LogFactoryUtil.getLog(TutorialStepServiceImpl.class);
+
 }

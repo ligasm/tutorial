@@ -53,6 +53,13 @@ public class TutorialStepServiceWrapper implements TutorialStepService,
             stepsListJson);
     }
 
+    @Override
+    public java.util.List<com.liferay.tutorial.model.TutorialStep> getTutorialSteps(
+        long companyId, long groupId, long plid)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        return _tutorialStepService.getTutorialSteps(companyId, groupId, plid);
+    }
+
     /**
      * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
      */

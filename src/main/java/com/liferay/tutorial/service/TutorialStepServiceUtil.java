@@ -58,6 +58,12 @@ public class TutorialStepServiceUtil {
         getService().addTutorialSteps(companyId, groupId, plid, stepsListJson);
     }
 
+    public static java.util.List<com.liferay.tutorial.model.TutorialStep> getTutorialSteps(
+        long companyId, long groupId, long plid)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        return getService().getTutorialSteps(companyId, groupId, plid);
+    }
+
     public static void clearService() {
         _service = null;
     }

@@ -612,15 +612,21 @@ public class TutorialStepClp extends BaseModelImpl<TutorialStep>
 
     @Override
     public int compareTo(TutorialStep tutorialStep) {
-        long primaryKey = tutorialStep.getPrimaryKey();
+        int value = 0;
 
-        if (getPrimaryKey() < primaryKey) {
-            return -1;
-        } else if (getPrimaryKey() > primaryKey) {
-            return 1;
+        if (getSequence() < tutorialStep.getSequence()) {
+            value = -1;
+        } else if (getSequence() > tutorialStep.getSequence()) {
+            value = 1;
         } else {
-            return 0;
+            value = 0;
         }
+
+        if (value != 0) {
+            return value;
+        }
+
+        return 0;
     }
 
     @Override

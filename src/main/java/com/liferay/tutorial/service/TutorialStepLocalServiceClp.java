@@ -46,6 +46,8 @@ public class TutorialStepLocalServiceClp implements TutorialStepLocalService {
     private String[] _methodParameterTypes17;
     private String _methodName19;
     private String[] _methodParameterTypes19;
+    private String _methodName20;
+    private String[] _methodParameterTypes20;
 
     public TutorialStepLocalServiceClp(
         InvokableLocalService invokableLocalService) {
@@ -146,6 +148,10 @@ public class TutorialStepLocalServiceClp implements TutorialStepLocalService {
         _methodParameterTypes19 = new String[] {
                 "com.liferay.tutorial.model.TutorialStep"
             };
+
+        _methodName20 = "getTutorialSteps";
+
+        _methodParameterTypes20 = new String[] { "long", "long", "long" };
     }
 
     @Override
@@ -691,5 +697,33 @@ public class TutorialStepLocalServiceClp implements TutorialStepLocalService {
         }
 
         return (com.liferay.tutorial.model.TutorialStep) ClpSerializer.translateOutput(returnObj);
+    }
+
+    @Override
+    public java.util.List<com.liferay.tutorial.model.TutorialStep> getTutorialSteps(
+        long companyId, long groupId, long plid)
+        throws com.liferay.portal.kernel.exception.SystemException {
+        Object returnObj = null;
+
+        try {
+            returnObj = _invokableLocalService.invokeMethod(_methodName20,
+                    _methodParameterTypes20,
+                    new Object[] { companyId, groupId, plid });
+        } catch (Throwable t) {
+            t = ClpSerializer.translateThrowable(t);
+
+            if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+                throw (com.liferay.portal.kernel.exception.SystemException) t;
+            }
+
+            if (t instanceof RuntimeException) {
+                throw (RuntimeException) t;
+            } else {
+                throw new RuntimeException(t.getClass().getName() +
+                    " is not a valid exception");
+            }
+        }
+
+        return (java.util.List<com.liferay.tutorial.model.TutorialStep>) ClpSerializer.translateOutput(returnObj);
     }
 }
