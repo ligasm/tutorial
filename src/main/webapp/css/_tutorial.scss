@@ -3,6 +3,8 @@ $setupTailBackground: rgb(172, 218, 255);
 
 .tutorial-popover{
 
+  z-index: 400;
+
   .popover-footer {
     text-align: center;
     margin: 10px;
@@ -44,6 +46,7 @@ div.tutorial-setup-container {
   position: fixed;
   height: 200px;
   width: 100%;
+  z-index: 400;
 
   .elem-display{
     top: -20px;
@@ -70,5 +73,17 @@ div.tutorial-setup-container {
   }
   .btn-row {
     padding-right: 10px;
+  }
+}
+
+div.tutorial-setup-message{
+  input, textarea {
+    width: 95%;
+
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  textarea {
+    height: 150px;
   }
 }
