@@ -247,6 +247,7 @@ AUI.add(
 
         var TUTORIAL_CONTAINER_TEMPLATE =
             '<div class="tutorial-setup-container">' +
+            '   <div class="elem-display"></div>' +
             '   <ol></ol>' +
             '   <div class="btn-row pagination-right">' +
             '       <button class="btn btn-save" data-action="saveAll"><i class="icon-ok"></i></button>' +
@@ -337,6 +338,16 @@ AUI.add(
 
                             steps[index]['config'] = config;
                         });
+
+                        var page = A.one('#wrapper');
+
+                        page.on(
+                            'mouseover',
+                            function(event){
+                                var name = instance._elemSerialization(event.target);
+                                instance._tutorialcontainer.one('.elem-display').text(name);
+                            }
+                        );
                     },
                     editStep : function(targetElem){
                         var instance = this;
@@ -444,7 +455,8 @@ AUI.add(
                         var index = 0;
 
                         for(var i = ancestors.length -1; i>=0 ;i--){
-                            if(!ancestors[i].id.startsWith("yui")){
+                            var id = ancestors[i].id
+                            if(id && !id.startsWith("yui")){
                                 index = i;
                                 break;
                             }
@@ -454,18 +466,16 @@ AUI.add(
                             var node = ancestors[i];
 
                             var elemName = node.nodeName;
-                            var elemId = node.id
+                            var elemId = node.id;
 
-                            path += elemName
+                            path += elemName;
 
-                            if(elemId.startsWith("yui")){
-                                A.Array.each(node.classList, function(value){
-                                    path += "." + value + ", ";
-                                });
-
-                                path = path.slice(0, -2);
-                            }else{
+                            if(elemId && !elemId.startsWith("yui")){
                                 path += "#"+ elemId;
+                            }else{
+                                A.Array.each(node.classList, function(value){
+                                    path += "." + value;
+                                });
                             }
 
                             path += " > "
