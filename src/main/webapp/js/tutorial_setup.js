@@ -88,8 +88,7 @@ AUI.add(
                         instance._popover.set('visible', false);
                         instance._popover.render();
 
-                        var page = A.one('#wrapper');
-
+                        var page = A.all('#wrapper, #p_p_id_145_');
                         page.on(
                             'click',
                             function (event) {
@@ -130,7 +129,6 @@ AUI.add(
                         instance._popover.set('position', position[2]);
                         instance.set('position', index);
                     }
-
                 }
             }
         );
@@ -251,6 +249,7 @@ AUI.add(
             '   <ol></ol>' +
             '   <div class="btn-row pagination-right">' +
             '       <button class="btn btn-save" data-action="saveAll"><i class="icon-ok"></i></button>' +
+            '       <button class="btn btn-remove" data-action="removeOverlay"><i class="icon-remove"></i></button>' +
             '   </div>' +
             '</div>'
 
@@ -285,6 +284,8 @@ AUI.add(
                         config = config || {};
 
                         var instance = this;
+
+                        instance._disableAllClicks();
 
                         instance._tutorialcontainer = A.Node.create(TUTORIAL_CONTAINER_TEMPLATE);
 
@@ -339,7 +340,7 @@ AUI.add(
                             steps[index]['config'] = config;
                         });
 
-                        var page = A.one('#wrapper');
+                        var page = A.all('#wrapper, #p_p_id_145_');
 
                         page.on(
                             'mouseover',
@@ -391,6 +392,9 @@ AUI.add(
                         }
 
                         instance._saveIO(JSON.stringify(sorted));
+                    },
+                    removeOverlay:function(){
+                        location.reload();
                     },
                     addTutorialStep : function(text, position, elem){
                         var instance = this;
@@ -486,6 +490,11 @@ AUI.add(
                     _saveIO : function(data){
                         console.log("Provide save to server operation.");
                         console.log(data);
+                    },
+                    _disableAllClicks: function () {
+                        A.all('button[onclick]').setAttribute("onclick","");
+                        A.all('a[onclick]').setAttribute("onclick","");
+                        A.all('a[onclick],a[href^="javascript"]').on('click', function(event){event.preventDefault();return false;})
                     }
                 }
             }
