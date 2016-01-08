@@ -7,6 +7,7 @@
 		<icon>/icon.png</icon>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<header-portlet-javascript>/js/main.js</header-portlet-javascript>
+		<css-class-wrapper>tutorial-setup</css-class-wrapper>
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>

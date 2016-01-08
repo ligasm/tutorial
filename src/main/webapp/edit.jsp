@@ -15,33 +15,57 @@
 --%>
 
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ taglib uri="http://alloy.liferay.com/tld/aui" prefix="aui" %>
+<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
 <portlet:defineObjects/>
 
+<aui:button-row>
+	<aui:button cssClass="openTutorialSetup" value="Open Step setup"/>
+</aui:button-row>
+
+<div class="tutorial-setup-message">
+
+	<portlet:renderURL var="redirect" portletMode="VIEW"/>
+	<portlet:actionURL name="saveTutorialTitle" var="saveURL">
+		<portlet:param name="redirect" value="${redirect}"/>
+	</portlet:actionURL>
+	<aui:form action="${saveURL}" method="POST">
+		<aui:input name="title" value="${title}"/>
+		<aui:input type="textarea" name="content" value="${content}"/>
+		<aui:button-row>
+			<aui:button type="submit" name="save"/>
+			<aui:button type="button" name="back" value="back" onClick="${redirect}"/>
+		</aui:button-row>
+	</aui:form>
+</div>
 <script type="text/javascript">
 
 	AUI().use('tutorial-setup',
 			function (A) {
 
+				A.one(".tutorial-setup .openTutorialSetup").on('click', function (event) {
+					event.stopPropagation();
 
-				new Liferay.TutorialSetupContainer({
-					saveFn: function (data) {
-						Liferay.Service(
-								'/tutorial-portlet.tutorialstep/add-tutorial-steps',
-								{
-									plid: themeDisplay.getPlid(),
-									companyId: themeDisplay.getCompanyId(),
-									groupId: themeDisplay.getScopeGroupId(),
-									stepsListJson: data
-								},
-								function (obj) {
-									alert("Operation was successful")
-								},
-								function (obj) {
-									alert("Error: " + obj)
-								}
-						);
-					}
+					new Liferay.TutorialSetupContainer({
+						saveFn: function (data) {
+							Liferay.Service(
+									'/tutorial-portlet.tutorialstep/add-tutorial-steps',
+									{
+										plid: themeDisplay.getPlid(),
+										companyId: themeDisplay.getCompanyId(),
+										groupId: themeDisplay.getScopeGroupId(),
+										stepsListJson: data
+									},
+									function (obj) {
+										alert("Operation was successful")
+									},
+									function (obj) {
+										alert("Error: " + obj)
+									}
+							);
+						}
+					});
 				});
 			}
 	);

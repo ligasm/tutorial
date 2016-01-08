@@ -26,8 +26,8 @@
 				var tutorial = new Liferay.Tutorial({
 					plid: themeDisplay.getPlid(),
 					welcomePopup: {
-						text: 'sdfg sd fgsd gs gsd s fs sd',
-						title: 'About Patient Map'
+						text: '${content}',
+						title: '${title}'
 					}
 				});
 
