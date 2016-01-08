@@ -62,12 +62,13 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
             { "plid", Types.BIGINT },
             { "sequence", Types.INTEGER },
             { "message", Types.VARCHAR },
-            { "position", Types.INTEGER },
+            { "position", Types.VARCHAR },
+            { "alignPosition", Types.VARCHAR },
             { "node", Types.VARCHAR },
             { "action", Types.VARCHAR },
             { "actionValue", Types.VARCHAR }
         };
-    public static final String TABLE_SQL_CREATE = "create table Tutorial_TutorialStep (stepId LONG not null primary key,companyId LONG,groupId LONG,plid LONG,sequence INTEGER,message STRING null,position INTEGER,node VARCHAR(255) null,action VARCHAR(75) null,actionValue VARCHAR(255) null)";
+    public static final String TABLE_SQL_CREATE = "create table Tutorial_TutorialStep (stepId LONG not null primary key,companyId LONG,groupId LONG,plid LONG,sequence INTEGER,message STRING null,position VARCHAR(75) null,alignPosition VARCHAR(75) null,node VARCHAR(255) null,action VARCHAR(75) null,actionValue VARCHAR(255) null)";
     public static final String TABLE_SQL_DROP = "drop table Tutorial_TutorialStep";
     public static final String ORDER_BY_JPQL = " ORDER BY tutorialStep.sequence ASC";
     public static final String ORDER_BY_SQL = " ORDER BY Tutorial_TutorialStep.sequence ASC";
@@ -106,7 +107,8 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
     private int _sequence;
     private String _message;
     private String _messageCurrentLanguageId;
-    private int _position;
+    private String _position;
+    private String _alignPosition;
     private String _node;
     private String _action;
     private String _actionValue;
@@ -136,6 +138,7 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
         model.setSequence(soapModel.getSequence());
         model.setMessage(soapModel.getMessage());
         model.setPosition(soapModel.getPosition());
+        model.setAlignPosition(soapModel.getAlignPosition());
         model.setNode(soapModel.getNode());
         model.setAction(soapModel.getAction());
         model.setActionValue(soapModel.getActionValue());
@@ -204,6 +207,7 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
         attributes.put("sequence", getSequence());
         attributes.put("message", getMessage());
         attributes.put("position", getPosition());
+        attributes.put("alignPosition", getAlignPosition());
         attributes.put("node", getNode());
         attributes.put("action", getAction());
         attributes.put("actionValue", getActionValue());
@@ -249,10 +253,16 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
             setMessage(message);
         }
 
-        Integer position = (Integer) attributes.get("position");
+        String position = (String) attributes.get("position");
 
         if (position != null) {
             setPosition(position);
+        }
+
+        String alignPosition = (String) attributes.get("alignPosition");
+
+        if (alignPosition != null) {
+            setAlignPosition(alignPosition);
         }
 
         String node = (String) attributes.get("node");
@@ -467,13 +477,32 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
 
     @JSON
     @Override
-    public int getPosition() {
-        return _position;
+    public String getPosition() {
+        if (_position == null) {
+            return StringPool.BLANK;
+        } else {
+            return _position;
+        }
     }
 
     @Override
-    public void setPosition(int position) {
+    public void setPosition(String position) {
         _position = position;
+    }
+
+    @JSON
+    @Override
+    public String getAlignPosition() {
+        if (_alignPosition == null) {
+            return StringPool.BLANK;
+        } else {
+            return _alignPosition;
+        }
+    }
+
+    @Override
+    public void setAlignPosition(String alignPosition) {
+        _alignPosition = alignPosition;
     }
 
     @JSON
@@ -612,6 +641,7 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
         tutorialStepImpl.setSequence(getSequence());
         tutorialStepImpl.setMessage(getMessage());
         tutorialStepImpl.setPosition(getPosition());
+        tutorialStepImpl.setAlignPosition(getAlignPosition());
         tutorialStepImpl.setNode(getNode());
         tutorialStepImpl.setAction(getAction());
         tutorialStepImpl.setActionValue(getActionValue());
@@ -709,6 +739,20 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
 
         tutorialStepCacheModel.position = getPosition();
 
+        String position = tutorialStepCacheModel.position;
+
+        if ((position != null) && (position.length() == 0)) {
+            tutorialStepCacheModel.position = null;
+        }
+
+        tutorialStepCacheModel.alignPosition = getAlignPosition();
+
+        String alignPosition = tutorialStepCacheModel.alignPosition;
+
+        if ((alignPosition != null) && (alignPosition.length() == 0)) {
+            tutorialStepCacheModel.alignPosition = null;
+        }
+
         tutorialStepCacheModel.node = getNode();
 
         String node = tutorialStepCacheModel.node;
@@ -738,7 +782,7 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
 
     @Override
     public String toString() {
-        StringBundler sb = new StringBundler(21);
+        StringBundler sb = new StringBundler(23);
 
         sb.append("{stepId=");
         sb.append(getStepId());
@@ -754,6 +798,8 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
         sb.append(getMessage());
         sb.append(", position=");
         sb.append(getPosition());
+        sb.append(", alignPosition=");
+        sb.append(getAlignPosition());
         sb.append(", node=");
         sb.append(getNode());
         sb.append(", action=");
@@ -767,7 +813,7 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
 
     @Override
     public String toXmlString() {
-        StringBundler sb = new StringBundler(34);
+        StringBundler sb = new StringBundler(37);
 
         sb.append("<model><model-name>");
         sb.append("com.liferay.tutorial.model.TutorialStep");
@@ -800,6 +846,10 @@ public class TutorialStepModelImpl extends BaseModelImpl<TutorialStep>
         sb.append(
             "<column><column-name>position</column-name><column-value><![CDATA[");
         sb.append(getPosition());
+        sb.append("]]></column-value></column>");
+        sb.append(
+            "<column><column-name>alignPosition</column-name><column-value><![CDATA[");
+        sb.append(getAlignPosition());
         sb.append("]]></column-value></column>");
         sb.append(
             "<column><column-name>node</column-name><column-value><![CDATA[");

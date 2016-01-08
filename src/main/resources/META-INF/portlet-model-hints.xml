@@ -10,7 +10,8 @@
 		<field name="message" type="String" localized="true">
 			<hint name="max-length">4000</hint>
 		</field>
-		<field name="position" type="int" />
+		<field name="position" type="String" />
+		<field name="alignPosition" type="String" />
 		<field name="node" type="String">
 			<hint name="max-length">255</hint>
 		</field>

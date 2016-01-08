@@ -5,7 +5,8 @@ create table Tutorial_TutorialStep (
 	plid LONG,
 	sequence INTEGER,
 	message STRING null,
-	position INTEGER,
+	position VARCHAR(75) null,
+	alignPosition VARCHAR(75) null,
 	node VARCHAR(255) null,
 	action VARCHAR(75) null,
 	actionValue VARCHAR(255) null

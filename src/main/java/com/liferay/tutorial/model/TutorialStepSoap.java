@@ -19,7 +19,8 @@ public class TutorialStepSoap implements Serializable {
     private long _plid;
     private int _sequence;
     private String _message;
-    private int _position;
+    private String _position;
+    private String _alignPosition;
     private String _node;
     private String _action;
     private String _actionValue;
@@ -37,6 +38,7 @@ public class TutorialStepSoap implements Serializable {
         soapModel.setSequence(model.getSequence());
         soapModel.setMessage(model.getMessage());
         soapModel.setPosition(model.getPosition());
+        soapModel.setAlignPosition(model.getAlignPosition());
         soapModel.setNode(model.getNode());
         soapModel.setAction(model.getAction());
         soapModel.setActionValue(model.getActionValue());
@@ -136,12 +138,20 @@ public class TutorialStepSoap implements Serializable {
         _message = message;
     }
 
-    public int getPosition() {
+    public String getPosition() {
         return _position;
     }
 
-    public void setPosition(int position) {
+    public void setPosition(String position) {
         _position = position;
+    }
+
+    public String getAlignPosition() {
+        return _alignPosition;
+    }
+
+    public void setAlignPosition(String alignPosition) {
+        _alignPosition = alignPosition;
     }
 
     public String getNode() {

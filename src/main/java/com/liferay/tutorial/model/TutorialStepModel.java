@@ -222,14 +222,30 @@ public interface TutorialStepModel extends BaseModel<TutorialStep> {
      *
      * @return the position of this tutorial step
      */
-    public int getPosition();
+    @AutoEscape
+    public String getPosition();
 
     /**
      * Sets the position of this tutorial step.
      *
      * @param position the position of this tutorial step
      */
-    public void setPosition(int position);
+    public void setPosition(String position);
+
+    /**
+     * Returns the align position of this tutorial step.
+     *
+     * @return the align position of this tutorial step
+     */
+    @AutoEscape
+    public String getAlignPosition();
+
+    /**
+     * Sets the align position of this tutorial step.
+     *
+     * @param alignPosition the align position of this tutorial step
+     */
+    public void setAlignPosition(String alignPosition);
 
     /**
      * Returns the node of this tutorial step.

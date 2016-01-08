@@ -373,6 +373,8 @@ AUI.add(
                             if(step){
                                 var storeStep = A.mix({},step);
                                 storeStep.elem = instance._elemSerialization(storeStep.elem);
+                                storeStep.position = POSITIONS[step.position][2];
+                                storeStep.alignPosition = POSITIONS[step.position][0]+","+POSITIONS[step.position][1];
                                 sorted.push(storeStep);
                             }
                         }

@@ -26,14 +26,15 @@ public class TutorialStepCacheModel implements CacheModel<TutorialStep>,
     public long plid;
     public int sequence;
     public String message;
-    public int position;
+    public String position;
+    public String alignPosition;
     public String node;
     public String action;
     public String actionValue;
 
     @Override
     public String toString() {
-        StringBundler sb = new StringBundler(21);
+        StringBundler sb = new StringBundler(23);
 
         sb.append("{stepId=");
         sb.append(stepId);
@@ -49,6 +50,8 @@ public class TutorialStepCacheModel implements CacheModel<TutorialStep>,
         sb.append(message);
         sb.append(", position=");
         sb.append(position);
+        sb.append(", alignPosition=");
+        sb.append(alignPosition);
         sb.append(", node=");
         sb.append(node);
         sb.append(", action=");
@@ -76,7 +79,17 @@ public class TutorialStepCacheModel implements CacheModel<TutorialStep>,
             tutorialStepImpl.setMessage(message);
         }
 
-        tutorialStepImpl.setPosition(position);
+        if (position == null) {
+            tutorialStepImpl.setPosition(StringPool.BLANK);
+        } else {
+            tutorialStepImpl.setPosition(position);
+        }
+
+        if (alignPosition == null) {
+            tutorialStepImpl.setAlignPosition(StringPool.BLANK);
+        } else {
+            tutorialStepImpl.setAlignPosition(alignPosition);
+        }
 
         if (node == null) {
             tutorialStepImpl.setNode(StringPool.BLANK);
@@ -109,7 +122,8 @@ public class TutorialStepCacheModel implements CacheModel<TutorialStep>,
         plid = objectInput.readLong();
         sequence = objectInput.readInt();
         message = objectInput.readUTF();
-        position = objectInput.readInt();
+        position = objectInput.readUTF();
+        alignPosition = objectInput.readUTF();
         node = objectInput.readUTF();
         action = objectInput.readUTF();
         actionValue = objectInput.readUTF();
@@ -130,7 +144,17 @@ public class TutorialStepCacheModel implements CacheModel<TutorialStep>,
             objectOutput.writeUTF(message);
         }
 
-        objectOutput.writeInt(position);
+        if (position == null) {
+            objectOutput.writeUTF(StringPool.BLANK);
+        } else {
+            objectOutput.writeUTF(position);
+        }
+
+        if (alignPosition == null) {
+            objectOutput.writeUTF(StringPool.BLANK);
+        } else {
+            objectOutput.writeUTF(alignPosition);
+        }
 
         if (node == null) {
             objectOutput.writeUTF(StringPool.BLANK);

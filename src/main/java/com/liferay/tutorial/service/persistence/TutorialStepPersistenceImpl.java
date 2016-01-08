@@ -906,6 +906,7 @@ public class TutorialStepPersistenceImpl extends BasePersistenceImpl<TutorialSte
         tutorialStepImpl.setSequence(tutorialStep.getSequence());
         tutorialStepImpl.setMessage(tutorialStep.getMessage());
         tutorialStepImpl.setPosition(tutorialStep.getPosition());
+        tutorialStepImpl.setAlignPosition(tutorialStep.getAlignPosition());
         tutorialStepImpl.setNode(tutorialStep.getNode());
         tutorialStepImpl.setAction(tutorialStep.getAction());
         tutorialStepImpl.setActionValue(tutorialStep.getActionValue());

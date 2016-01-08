@@ -47,7 +47,8 @@ public class TutorialStepServiceImpl extends TutorialStepServiceBaseImpl {
 
 			tutorialStep.setSequence(i++);
 			tutorialStep.setMessage(step.getString("text"));
-			tutorialStep.setPosition(step.getInt("position"));
+			tutorialStep.setPosition(step.getString("position"));
+			tutorialStep.setAlignPosition(step.getString("alignPosition"));
 			tutorialStep.setNode(step.getString("elem"));
 			JSONObject config = step.getJSONObject("config");
 

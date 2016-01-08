@@ -36,7 +36,8 @@ public class TutorialStepClp extends BaseModelImpl<TutorialStep>
     private int _sequence;
     private String _message;
     private String _messageCurrentLanguageId;
-    private int _position;
+    private String _position;
+    private String _alignPosition;
     private String _node;
     private String _action;
     private String _actionValue;
@@ -87,6 +88,7 @@ public class TutorialStepClp extends BaseModelImpl<TutorialStep>
         attributes.put("sequence", getSequence());
         attributes.put("message", getMessage());
         attributes.put("position", getPosition());
+        attributes.put("alignPosition", getAlignPosition());
         attributes.put("node", getNode());
         attributes.put("action", getAction());
         attributes.put("actionValue", getActionValue());
@@ -132,10 +134,16 @@ public class TutorialStepClp extends BaseModelImpl<TutorialStep>
             setMessage(message);
         }
 
-        Integer position = (Integer) attributes.get("position");
+        String position = (String) attributes.get("position");
 
         if (position != null) {
             setPosition(position);
+        }
+
+        String alignPosition = (String) attributes.get("alignPosition");
+
+        if (alignPosition != null) {
+            setAlignPosition(alignPosition);
         }
 
         String node = (String) attributes.get("node");
@@ -389,21 +397,43 @@ public class TutorialStepClp extends BaseModelImpl<TutorialStep>
     }
 
     @Override
-    public int getPosition() {
+    public String getPosition() {
         return _position;
     }
 
     @Override
-    public void setPosition(int position) {
+    public void setPosition(String position) {
         _position = position;
 
         if (_tutorialStepRemoteModel != null) {
             try {
                 Class<?> clazz = _tutorialStepRemoteModel.getClass();
 
-                Method method = clazz.getMethod("setPosition", int.class);
+                Method method = clazz.getMethod("setPosition", String.class);
 
                 method.invoke(_tutorialStepRemoteModel, position);
+            } catch (Exception e) {
+                throw new UnsupportedOperationException(e);
+            }
+        }
+    }
+
+    @Override
+    public String getAlignPosition() {
+        return _alignPosition;
+    }
+
+    @Override
+    public void setAlignPosition(String alignPosition) {
+        _alignPosition = alignPosition;
+
+        if (_tutorialStepRemoteModel != null) {
+            try {
+                Class<?> clazz = _tutorialStepRemoteModel.getClass();
+
+                Method method = clazz.getMethod("setAlignPosition", String.class);
+
+                method.invoke(_tutorialStepRemoteModel, alignPosition);
             } catch (Exception e) {
                 throw new UnsupportedOperationException(e);
             }
@@ -603,6 +633,7 @@ public class TutorialStepClp extends BaseModelImpl<TutorialStep>
         clone.setSequence(getSequence());
         clone.setMessage(getMessage());
         clone.setPosition(getPosition());
+        clone.setAlignPosition(getAlignPosition());
         clone.setNode(getNode());
         clone.setAction(getAction());
         clone.setActionValue(getActionValue());
@@ -661,7 +692,7 @@ public class TutorialStepClp extends BaseModelImpl<TutorialStep>
 
     @Override
     public String toString() {
-        StringBundler sb = new StringBundler(21);
+        StringBundler sb = new StringBundler(23);
 
         sb.append("{stepId=");
         sb.append(getStepId());
@@ -677,6 +708,8 @@ public class TutorialStepClp extends BaseModelImpl<TutorialStep>
         sb.append(getMessage());
         sb.append(", position=");
         sb.append(getPosition());
+        sb.append(", alignPosition=");
+        sb.append(getAlignPosition());
         sb.append(", node=");
         sb.append(getNode());
         sb.append(", action=");
@@ -690,7 +723,7 @@ public class TutorialStepClp extends BaseModelImpl<TutorialStep>
 
     @Override
     public String toXmlString() {
-        StringBundler sb = new StringBundler(34);
+        StringBundler sb = new StringBundler(37);
 
         sb.append("<model><model-name>");
         sb.append("com.liferay.tutorial.model.TutorialStep");
@@ -723,6 +756,10 @@ public class TutorialStepClp extends BaseModelImpl<TutorialStep>
         sb.append(
             "<column><column-name>position</column-name><column-value><![CDATA[");
         sb.append(getPosition());
+        sb.append("]]></column-value></column>");
+        sb.append(
+            "<column><column-name>alignPosition</column-name><column-value><![CDATA[");
+        sb.append(getAlignPosition());
         sb.append("]]></column-value></column>");
         sb.append(
             "<column><column-name>node</column-name><column-value><![CDATA[");

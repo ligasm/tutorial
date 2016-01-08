@@ -16,6 +16,7 @@
 			<basic name="sequence" />
 			<basic name="message" />
 			<basic name="position" />
+			<basic name="alignPosition" />
 			<basic name="node" />
 			<basic name="action" />
 			<basic name="actionValue" />

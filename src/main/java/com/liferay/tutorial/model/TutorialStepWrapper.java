@@ -44,6 +44,7 @@ public class TutorialStepWrapper implements TutorialStep,
         attributes.put("sequence", getSequence());
         attributes.put("message", getMessage());
         attributes.put("position", getPosition());
+        attributes.put("alignPosition", getAlignPosition());
         attributes.put("node", getNode());
         attributes.put("action", getAction());
         attributes.put("actionValue", getActionValue());
@@ -89,10 +90,16 @@ public class TutorialStepWrapper implements TutorialStep,
             setMessage(message);
         }
 
-        Integer position = (Integer) attributes.get("position");
+        String position = (String) attributes.get("position");
 
         if (position != null) {
             setPosition(position);
+        }
+
+        String alignPosition = (String) attributes.get("alignPosition");
+
+        if (alignPosition != null) {
+            setAlignPosition(alignPosition);
         }
 
         String node = (String) attributes.get("node");
@@ -381,7 +388,7 @@ public class TutorialStepWrapper implements TutorialStep,
     * @return the position of this tutorial step
     */
     @Override
-    public int getPosition() {
+    public java.lang.String getPosition() {
         return _tutorialStep.getPosition();
     }
 
@@ -391,8 +398,28 @@ public class TutorialStepWrapper implements TutorialStep,
     * @param position the position of this tutorial step
     */
     @Override
-    public void setPosition(int position) {
+    public void setPosition(java.lang.String position) {
         _tutorialStep.setPosition(position);
+    }
+
+    /**
+    * Returns the align position of this tutorial step.
+    *
+    * @return the align position of this tutorial step
+    */
+    @Override
+    public java.lang.String getAlignPosition() {
+        return _tutorialStep.getAlignPosition();
+    }
+
+    /**
+    * Sets the align position of this tutorial step.
+    *
+    * @param alignPosition the align position of this tutorial step
+    */
+    @Override
+    public void setAlignPosition(java.lang.String alignPosition) {
+        _tutorialStep.setAlignPosition(alignPosition);
     }
 
     /**
