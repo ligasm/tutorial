@@ -35,7 +35,10 @@
 									stepsListJson: data
 								},
 								function (obj) {
-									console.log(obj);
+									alert("Operation was successful")
+								},
+								function (obj) {
+									alert("Error: " + obj)
 								}
 						);
 					}
