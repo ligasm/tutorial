@@ -68,7 +68,7 @@ AUI.add(
 						var previousTutorialStep = instance._tutorialSteps[instance.get('stepIndex')];
 
 						if (previousTutorialStep && previousTutorialStep.after) {
-							previousTutorialStep.after();
+							instance._executeAfter(previousTutorialStep);
 						}
 
 						instance._popover.hide();
@@ -199,13 +199,10 @@ AUI.add(
 
 						var previousTutorialStep = instance._tutorialSteps[instance.get('stepIndex')];
 
-						if (previousTutorialStep && previousTutorialStep.after) {
-							previousTutorialStep.after();
+						if (instance._firstStepChange && previousTutorialStep && previousTutorialStep.after) {
+							instance._executeAfter(previousTutorialStep);
 						}
-
-						if(index == 0){
-							console.log(instance)
-						}
+						instance._firstStepChange = true;
 					},
 
 					_syncAvailableActions: function(index) {
@@ -217,6 +214,19 @@ AUI.add(
 
 						boundingBox.toggleClass('first-step', index <= 0);
 						boundingBox.toggleClass('last-step', index >= length);
+					},
+
+					_executeAfter : function(step){
+
+						if(typeof step.after === 'function'){
+							step.after();
+						} else{
+							if(step.after.action == 'click' || step.after.action == 'dblclick'){
+								step.align.node.fire(step.after.action)
+							} else if(step.after.action == 'http'){
+								document.location.href = step.after.value;
+							}
+						}
 					}
 				}
 			}

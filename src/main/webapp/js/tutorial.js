@@ -2,7 +2,7 @@ AUI.add(
     'tutorial',
     function (A) {
 
-        var PATIENT_MAP_TUTORIAL_VIEWED = 'tutorial_viewed_state';
+        var TUTORIAL_VIEWD_STATE = 'tutorial_viewed_state';
 
         var Tutorial = A.Component.create(
             {
@@ -15,6 +15,7 @@ AUI.add(
                     initializer: function (config) {
                         var instance = this;
 
+                        instance._plid = config.plid;
                         instance._totorialSteps = config.tutorialSteps;
                         instance._welcomePopup = config.welcomePopup;
 
@@ -25,6 +26,11 @@ AUI.add(
                         var instance = this;
 
                         instance._getTutorialViewed(instance._showWelcomModal);
+                    },
+                    setTutorialSteps: function(tutorialSteps){
+                        var instance = this;
+
+                        instance._totorialSteps = tutorialSteps;
                     },
 
                     _showWelcomModal: function(shown) {
@@ -52,7 +58,8 @@ AUI.add(
                                         label: 'Don\'t show this next time.',
                                         on: {
                                             click: function() {
-                                                Liferay.Store(PATIENT_MAP_TUTORIAL_VIEWED, true);
+                                                var key = TUTORIAL_VIEWD_STATE + "-" + instance._plid;
+                                                Liferay.Store(key, true);
 
                                                 tutorialModal._modal.hide();
                                             }
@@ -111,7 +118,9 @@ AUI.add(
                     _getTutorialViewed: function(cb) {
                         var instance = this;
 
-                        Liferay.Store(PATIENT_MAP_TUTORIAL_VIEWED, A.bind(cb, instance));
+                        var key = TUTORIAL_VIEWD_STATE + "-" + instance._plid;
+
+                        Liferay.Store(key, A.bind(cb, instance));
                     }
 
                 }

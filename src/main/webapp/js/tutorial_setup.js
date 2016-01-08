@@ -54,7 +54,7 @@ AUI.add(
                                 align: {
                                     points: [position[0], position[1]]
                                 },
-                                cssClass: 'tutorial-step-popover',
+                                cssClass: 'tutorial-setup-popover',
                                 footerContent: footerContent,
                                 bodyContent: mainContent,
                                 position: position[2],
@@ -374,7 +374,7 @@ AUI.add(
                                 var storeStep = A.mix({},step);
                                 storeStep.elem = instance._elemSerialization(storeStep.elem);
                                 storeStep.position = POSITIONS[step.position][2];
-                                storeStep.alignPosition = POSITIONS[step.position][0]+","+POSITIONS[step.position][1];
+                                storeStep.alignPosition = [POSITIONS[step.position][0],POSITIONS[step.position][1]];
                                 sorted.push(storeStep);
                             }
                         }

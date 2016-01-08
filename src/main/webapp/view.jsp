@@ -23,6 +23,14 @@
 	AUI().ready('tutorial',
 			function (A) {
 
+				var tutorial = new Liferay.Tutorial({
+					plid: themeDisplay.getPlid(),
+					welcomePopup: {
+						text: 'sdfg sd fgsd gs gsd s fs sd',
+						title: 'About Patient Map'
+					}
+				});
+
 				Liferay.Service(
 						'/tutorial-portlet.tutorialstep/get-tutorial-steps',
 						{
@@ -31,52 +39,29 @@
 							groupId: themeDisplay.getScopeGroupId()
 						},
 						function(obj) {
-							console.log(obj);
+							var _tutorialSteps = [];
+							A.Array.forEach(obj, function(item){
+								var after = {};
+								if(item.action){
+									after.action = item.action;
+									after.value = item.actionValue;
+								}
+								_tutorialSteps.push({
+									align: {
+										node: item.node,
+										points: JSON.parse(item.alignPosition)
+									},
+									bodyContent: item.messageCurrentValue,
+									position: item.position,
+									after :after
+								});
+							});
+
+							tutorial.setTutorialSteps(_tutorialSteps);
+							tutorial.activateTutorial();
 						}
 				);
 
-				var _tutorialSteps = [
-					{
-						align: {
-							node: 'a.logo',
-							points: ['tc', 'bc']
-						},
-						bodyContent: 'Test 1',
-						position: 'bottom'
-					},
-					{
-						align: {
-							node: 'li.user-avatar',
-							points: ['tc', 'bc']
-						},
-						bodyContent: 'Test 2',
-						position: 'bottom'
-					},
-					{
-						align: {
-							node: '#portlet_58',
-							points: ['bc', 'cc']
-						},
-						bodyContent: 'Test 3',
-						position: 'top'
-					},
-					{
-						align: {
-							node: '#portlet_tutorial_WAR_tutorialportlet',
-							points: ['cc', 'rc']
-						},
-						bodyContent: 'Test 4',
-						position: 'right'
-					}
-				];
-
-				new Liferay.Tutorial({
-					tutorialSteps: _tutorialSteps,
-					welcomePopup: {
-						text: 'sdfg sd fgsd gs gsd s fs sd',
-						title: 'About Patient Map'
-					}
-				}).activateTutorial();
 			}
 	);
 </script>

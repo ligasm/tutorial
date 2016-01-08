@@ -1,4 +1,26 @@
-.tutorial-step-popover {
+.tutorial-popover{
+
+  .popover-footer {
+    text-align: center;
+    margin: 10px;
+
+    button {
+      margin-left: 1px;
+      margin-right: 1px;
+    }
+
+  }
+
+  &.first-step  button[data-action="prev"] {
+    display: none
+  }
+
+  &.last-step  button[data-action="next"] {
+    display: none
+  }
+}
+
+.tutorial-setup-popover {
   .popover-content {
     height: 150px;
 
@@ -10,14 +32,6 @@
   .popover-footer {
     text-align: center;
     margin-bottom: 10px;
-  }
-
-  &.first-step button[data-action="prev"] {
-    display: none
-  }
-
-  &.last-step button[data-action="next"] {
-    display: none
   }
 }
 
