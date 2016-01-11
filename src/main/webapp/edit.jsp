@@ -26,7 +26,7 @@
 
 <div class="tutorial-setup-message">
 
-	<portlet:renderURL var="redirect" portletMode="VIEW"/>
+	<portlet:renderURL var="redirect"/>
 	<portlet:actionURL name="saveTutorialTitle" var="saveURL">
 		<portlet:param name="redirect" value="${redirect}"/>
 	</portlet:actionURL>
@@ -35,7 +35,8 @@
 		<aui:input type="textarea" name="content" value="${content}"/>
 		<aui:button-row>
 			<aui:button type="submit" name="save"/>
-			<aui:button type="button" name="back" value="back" onClick="${redirect}"/>
+			<portlet:renderURL var="backURL" portletMode="VIEW"/>
+			<aui:button type="button" name="back" value="back" onClick="${backURL}"/>
 		</aui:button-row>
 	</aui:form>
 </div>
