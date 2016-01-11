@@ -111,27 +111,23 @@ AUI.add(
 
 						var tutorialSteps = instance._tutorialSteps;
 
-						var length = 0;
+						instance._tutorialSteps = [];
 
 						A.each(
 							tutorialSteps,
 							function(item, index) {
 								var alignNode = A.one(item.align.node);
 
-								item.align.node = alignNode;
-
-								if (alignNode && alignNode.test(':visible') && !alignNode.hasClass('hide')) {
-									length++;
-								}
-
 								if (!item.align.points) {
 									item.align.points = instance.DEFAULT_ALIGN_POINTS;
 								}
+
+								if (alignNode && alignNode.test(':visible') && !alignNode.hasClass('hide')) {
+									item.align.node = alignNode;
+									instance._tutorialSteps.push(item);
+								}
 							}
 						);
-
-						instance._availableStepsLength = length;
-						instance._tutorialSteps = tutorialSteps;
 					},
 
 					_onFooterButtonClick: function(event) {
@@ -189,13 +185,7 @@ AUI.add(
 
 						instance.set('customPosition', tutorialStep.customPosition || '');
 
-						var node = tutorialStep.align.node;
-
-						if (tutorialStep.align.selector) {
-							node = A.one(tutorialStep.align.selector);
-						}
-
-						popover.align(node, tutorialStep.align.points);
+						popover.align(tutorialStep.align.node, tutorialStep.align.points);
 
 						var previousTutorialStep = instance._tutorialSteps[instance.get('stepIndex')];
 
@@ -210,7 +200,7 @@ AUI.add(
 
 						var boundingBox = instance._popover.get('boundingBox');
 
-						var length = instance._availableStepsLength - 1;
+						var length = instance._tutorialSteps.length - 1;
 
 						boundingBox.toggleClass('first-step', index <= 0);
 						boundingBox.toggleClass('last-step', index >= length);
