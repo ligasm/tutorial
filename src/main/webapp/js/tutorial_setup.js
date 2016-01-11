@@ -58,7 +58,7 @@ AUI.add(
                                 footerContent: footerContent,
                                 bodyContent: mainContent,
                                 position: position[2],
-                                zIndex: 20
+                                zIndex: 999
                             }
                         );
 
@@ -88,17 +88,23 @@ AUI.add(
                         instance._popover.set('visible', false);
                         instance._popover.render();
 
-                        var page = A.all('#wrapper, #p_p_id_145_');
+                        var page = A.one('body');
                         page.on(
                             'click',
                             function (event) {
                                 var elem = event.target;
 
+                                var anc = elem.ancestors();
+                                if(anc.hasClass('tutorial-setup-popover').indexOf(true) > 0 ||
+                                   anc.hasClass('tutorial-setup-container').indexOf(true) > 0){
+                                    return true;
+                                }
+
                                 event.stopPropagation();
                                 event.preventDefault();
 
 
-                                elem.setStyle('border', '2px solid yellow');
+                                //elem.setStyle('border', '2px solid yellow');
 
                                 instance.display.call(instance, {
                                     node: elem,
@@ -340,8 +346,7 @@ AUI.add(
                             steps[index]['config'] = config;
                         });
 
-                        var page = A.all('#wrapper, #p_p_id_145_');
-
+                        var page = A.one('body');
                         page.on(
                             'mouseover',
                             function(event){
@@ -478,6 +483,9 @@ AUI.add(
                                 path += "#"+ elemId;
                             }else{
                                 A.Array.each(node.classList, function(value){
+                                    if(value.startsWith("yui") || value.startsWith("aui")){
+                                        return;
+                                    }
                                     path += "." + value;
                                 });
                             }
@@ -492,6 +500,7 @@ AUI.add(
                         console.log(data);
                     },
                     _disableAllClicks: function () {
+                        A.all('div,p,span,button,a').detach('click');
                         A.all('button[onclick]').setAttribute("onclick","");
                         A.all('a[onclick]').setAttribute("onclick","");
                         A.all('a[onclick],a[href^="javascript"]').on('click', function(event){event.preventDefault();return false;})
