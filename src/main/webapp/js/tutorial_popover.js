@@ -49,7 +49,7 @@ AUI.add(
 								cssClass: 'tutorial-popover',
 								footerContent: footerContent,
 								position: 'bottom',
-								zIndex: 20
+								zIndex: 999
 							}
 						);
 
@@ -316,6 +316,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-component', 'aui-modal', 'aui-popover', 'aui-template-deprecated']
+		requires: ['aui-base', 'aui-component', 'aui-modal', 'aui-popover', 'aui-template-deprecated', 'aui-node','node-event-simulate']
 	}
 );

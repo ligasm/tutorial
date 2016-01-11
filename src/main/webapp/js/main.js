@@ -9,11 +9,11 @@ AUI().applyConfig({
         },
         'tutorial-popover': {
             fullpath: tutorial + 'tutorial_popover.js',
-            requires: ['aui-base', 'aui-component', 'aui-popover', 'aui-template-deprecated']
+            requires: ['aui-base', 'aui-component', 'aui-modal', 'aui-popover', 'aui-template-deprecated', 'aui-node','node-event-simulate']
         },
         'tutorial-setup': {
             fullpath: tutorial + 'tutorial_setup.js',
-            requires: ['aui-base', 'aui-component', 'aui-popover', 'aui-template-deprecated']
+            requires: ['aui-base', 'aui-component', 'aui-popover', 'node-event-delegate','aui-sortable-list','aui-modal']
         }
     }
 });
