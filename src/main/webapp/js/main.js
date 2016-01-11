@@ -1,4 +1,5 @@
-var tutorial = Liferay.ThemeDisplay.getPortalURL() + '/tutorial-portlet/js/';
+var pathContext = Liferay.ThemeDisplay.getPathContext() ? Liferay.ThemeDisplay.getPathContext() : "";
+var tutorial = Liferay.ThemeDisplay.getPortalURL() + pathContext + '/tutorial-portlet/js/';
 
 AUI().applyConfig({
     modules: {
